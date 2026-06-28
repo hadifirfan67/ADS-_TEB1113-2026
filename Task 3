@@ -1,0 +1,55 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+// Calculates the maximum area of a rectangle containing only 1s
+int maxArea(const vector<vector<int>> &mat) {
+    if (mat.empty() || mat[0].empty()) return 0;
+
+    int n = mat.size();    // number of rows
+    int m = mat[0].size(); // number of columns
+
+    // memo[i][j] will store the number of consecutive 1s to the left of and including mat[i][j]
+    vector<vector<int>> memo(n, vector<int>(m, 0));
+    int maxRectangleArea = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < m; j++) {
+            // Skip if the current cell is 0
+            if (mat[i][j] == 0) {
+                continue;
+            }
+
+            // Compute the width of 1s ending at (i, j)
+            memo[i][j] = (j == 0) ? 1 : memo[i][j - 1] + 1;
+
+            int width = memo[i][j];
+
+            // Traverse upwards row by row to find the maximum area rectangle 
+            // with its bottom-right corner at (i, j)
+            for (int k = i; k >= 0; k--) {
+                width = min(width, memo[k][j]); // The bounding width shrinks to the minimum width found so far
+                int height = i - k + 1;
+                int currentArea = width * height;
+                
+                maxRectangleArea = max(maxRectangleArea, currentArea);
+            }
+        }
+    }
+    return maxRectangleArea;
+}
+
+int main() {
+    vector<vector<int>> mat = {
+        {0, 1, 1, 0},
+        {1, 1, 1, 1},
+        {1, 1, 1, 0},
+        {1, 1, 0, 0}
+    };
+
+    cout << "Maximum area of 1s: " << maxArea(mat) << endl; // Output: 6
+
+    return 0;
+}
