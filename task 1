@@ -1,0 +1,154 @@
+#include <iostream>
+#include <string>
+#include <limits>
+using namespace std;
+
+// Structure to store student information
+struct Student {
+    int id;
+    string name;
+    string course;
+    int age;
+};
+
+// Helper function to handle safe integer input and validation
+int getValidInt(const string& prompt, const string& errorMsg) {
+    int value;
+    cout << prompt;
+    while (!(cin >> value)) {
+        cout << errorMsg;
+        cin.clear(); // clear error flag
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    }
+    cin.ignore(numeric_limits<streamsize>::max(), '\n'); // clear trailing newline
+    return value;
+}
+
+int main() {
+    // Array of 5 Student records
+    Student students[5];
+
+    cout << "--- Input Student Records ---\n\n";
+
+    // Input details for 5 students
+    for (int i = 0; i < 5; i++) {
+        cout << "Student " << i + 1 << "\n";
+
+        students[i].id = getValidInt("ID: ", "Invalid ID. Enter numbers only: ");
+        
+        cout << "Name: ";
+        getline(cin, students[i].name);
+
+        cout << "Course: ";
+        getline(cin, students[i].course);
+
+        students[i].age = getValidInt("Age: ", "Invalid Age. Enter numbers only: ");
+        cout << "\n";
+    }
+
+    // Display all student records
+    cout << "--- All Students ---\n\n";
+    for (int i = 0; i < 5; i++) {
+        cout << "ID: " << students[i].id << "\n";
+        cout << "Name: " << students[i].name << "\n";
+        cout << "Course: " << students[i].course << "\n";
+        cout << "Age: " << students[i].age << "\n\n";
+    }
+
+    // Search student by ID
+    cout << "--- Search Student ---\n";
+    int searchID = getValidInt("Enter ID to search: ", "Invalid ID. Enter numbers only: ");
+    bool searchFound = false;
+
+    // Linear search through the array
+    for (int i = 0; i < 5; i++) {
+        if (students[i].id == searchID) {
+            cout << "Found. Name: " << students[i].name << "\n";
+            searchFound = true;
+            break;
+        }
+    }
+
+    if (!searchFound) {
+        cout << "Student not found.\n";
+    }
+
+    // Update student records repeatedly until user quits
+    cout << "\n--- Update Records Mode ---\n";
+    string inputID;
+
+    while (true) {
+        cout << "\nEnter ID to update (or Q to quit): ";
+        cin >> inputID;
+
+        // Exit update mode
+        if (inputID == "Q" || inputID == "q") {
+            cout << "Exiting update mode.\n";
+            break;
+        }
+
+        int updateID;
+        // Convert string to integer safely
+        try {
+            updateID = stoi(inputID);
+        }
+        catch (...) {
+            cout << "Invalid ID format.\n";
+            continue;
+        }
+
+        string change;
+        cout << "What do you want to change (id/name/course/age): ";
+        cin >> change;
+        
+        // Clean the buffer immediately after reading the menu selection string
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+        bool updateFound = false;
+
+        // Search for matching ID
+        for (int i = 0; i < 5; i++) {
+            if (students[i].id == updateID) {
+                updateFound = true;
+                
+                // Use a reference to make fields easier to access and modify
+                Student& currentStudent = students[i]; 
+
+                if (change == "id") {
+                    currentStudent.id = getValidInt("Enter new ID: ", "Invalid ID. Enter numbers only: ");
+                    cout << "Updated.\n";
+                }
+                else if (change == "name") {
+                    cout << "Enter new name: ";
+                    getline(cin, currentStudent.name);
+                    cout << "Updated.\n";
+                }
+                else if (change == "course") {
+                    cout << "Enter new course: ";
+                    getline(cin, currentStudent.course);
+                    cout << "Updated.\n";
+                }
+                else if (change == "age") {
+                    currentStudent.age = getValidInt("Enter new age: ", "Invalid Age. Enter numbers only: ");
+                    cout << "Updated.\n";
+                }
+                else {
+                    cout << "Invalid field. Use: id, name, course, or age.\n";
+                }
+
+                // Display updated record
+                cout << "ID: " << currentStudent.id << "\n";
+                cout << "Name: " << currentStudent.name << "\n";
+                cout << "Course: " << currentStudent.course << "\n";
+                cout << "Age: " << currentStudent.age << "\n";
+                break;
+            }
+        }
+
+        if (!updateFound) {
+            cout << "Student not found.\n";
+        }
+    }
+
+    return 0;
+}
