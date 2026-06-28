@@ -1,0 +1,58 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+#include <climits>
+
+using namespace std;
+
+int median(const vector<vector<int>> &mat) {
+    int n = mat.size();
+    int m = mat[0].size();
+
+    int minVal = INT_MAX;
+    int maxVal = INT_MIN;
+
+    // Find the absolute minimum and maximum elements in the row-wise sorted matrix
+    // Since each row is sorted, the minimum is in the first column, and maximum is in the last column
+    for (int i = 0; i < n; i++) {
+        minVal = min(minVal, mat[i][0]);
+        maxVal = max(maxVal, mat[i][m - 1]);
+    }
+
+    // The position we are looking for (1-based index of the median element)
+    int desired = (n * m + 1) / 2; 
+    
+    int lo = minVal, hi = maxVal;
+    while (lo < hi) {
+        int mid = lo + (hi - lo) / 2;
+        int count = 0;
+
+        // Count elements smaller than or equal to 'mid' across all rows
+        for (int i = 0; i < n; i++) {
+            // upper_bound returns iterator to the first element > mid
+            // Subtracting .begin() gives the exact count of elements <= mid
+            count += upper_bound(mat[i].begin(), mat[i].end(), mid) - mat[i].begin();
+        }
+
+        // Binary search adjustment based on the count of elements
+        if (count < desired) {
+            lo = mid + 1;
+        } else {
+            hi = mid;
+        }
+    }
+    
+    return lo;
+}
+
+int main() {
+    vector<vector<int>> mat = {
+        {1, 3, 5},
+        {2, 6, 9},
+        {3, 6, 9}
+    };
+    
+    cout << "Median: " << median(mat) << endl;
+    
+    return 0;
+}
