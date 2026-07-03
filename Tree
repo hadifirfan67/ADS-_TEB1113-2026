@@ -1,0 +1,104 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+
+struct DLLNode {
+    string name;
+    DLLNode* next;
+    DLLNode* prev; 
+};
+
+struct TreeNode {
+    string name;
+    TreeNode* left;
+    TreeNode* right;
+    
+    TreeNode(string val) {
+        name = val;
+        left = NULL;
+        right = NULL;
+    }
+};
+
+TreeNode* insertTreeNode(TreeNode* root, string name) {
+    if (root == NULL) {
+        return new TreeNode(name);
+    }
+    if (name < root->name) {
+        root->left = insertTreeNode(root->left, name);
+    } else {
+        root->right = insertTreeNode(root->right, name);
+    }
+    return root;
+}
+
+
+void printTreeInOrder(TreeNode* root) {
+    if (root == NULL) return;
+    printTreeInOrder(root->left);
+    cout << root->name << " ";
+    printTreeInOrder(root->right);
+}
+
+int main() {
+   
+    DLLNode* head;
+    DLLNode* one = new DLLNode();
+    DLLNode* two = new DLLNode();
+    DLLNode* three = new DLLNode();
+    DLLNode* four = new DLLNode();
+
+    one->name = "Aimar";
+    two->name = "Ahmad";
+    three->name = "Anjana";
+    four->name = "Jessy";
+
+  
+    one->next = two;
+    two->next = three;
+    three->next = four;
+    four->next = NULL;
+
+ 
+    one->prev = NULL;
+    two->prev = one;
+    three->prev = two;
+    four->prev = three;
+
+   
+    cout << "Doubly Linked List (Forward): ";
+    head = one;
+    DLLNode* tail = NULL;
+    while (head != NULL) {
+        cout << head->name << " ";
+        if (head->next == NULL) {
+            tail = head;
+        }
+        head = head->next;
+    }
+    cout << endl;
+
+   
+    cout << "Doubly Linked List (Backward): ";
+    while (tail != NULL) {
+        cout << tail->name << " ";
+        tail = tail->prev;
+    }
+    cout << "\n\n";
+
+   
+    TreeNode* treeRoot = NULL;
+    
+  
+    treeRoot = insertTreeNode(treeRoot, "Aimar");
+    treeRoot = insertTreeNode(treeRoot, "Ahmad");
+    treeRoot = insertTreeNode(treeRoot, "Anjana");
+    treeRoot = insertTreeNode(treeRoot, "Jessy");
+
+    cout << "Binary Search Tree (In-Order Traversal / Alphabetical): " << endl;
+    printTreeInOrder(treeRoot);
+    cout << endl;
+
+    return 0;
+}
