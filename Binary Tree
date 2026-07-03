@@ -1,0 +1,108 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Doubly Linked List Node
+struct DLLNode {
+    string name;
+    DLLNode* next;
+    DLLNode* prev;
+};
+
+// Binary Tree Node
+struct TreeNode {
+    string name;
+    TreeNode* left;
+    TreeNode* right;
+};
+
+// Tree Traversal Functions 
+
+// Pre-Order: Root -> Left -> Right
+void printPreOrder(TreeNode* root) {
+    if (root == NULL) return;
+    cout << root->name << " ";
+    printPreOrder(root->left);
+    printPreOrder(root->right);
+}
+
+// In-Order: Left -> Root -> Right
+void printInOrder(TreeNode* root) {
+    if (root == NULL) return;
+    printInOrder(root->left);
+    cout << root->name << " ";
+    printInOrder(root->right);
+}
+
+// Post-Order: Left -> Right -> Root
+void printPostOrder(TreeNode* root) {
+    if (root == NULL) return;
+    printPostOrder(root->left);
+    printPostOrder(root->right);
+    cout << root->name << " ";
+}
+
+int main() {
+    // DOUBLY LINKED LIST SECTION 
+    DLLNode* head;
+    DLLNode* one = new DLLNode();
+    DLLNode* two = new DLLNode();
+    DLLNode* three = new DLLNode();
+    DLLNode* four = new DLLNode();
+
+    one->name = "Aimar";
+    two->name = "Ahmad";
+    three->name = "Anjana";
+    four->name = "Jessy";
+
+    // Forward links
+    one->next = two; two->next = three; three->next = four; four->next = NULL;
+    // Backward links
+    one->prev = NULL; two->prev = one; three->prev = two; four->prev = three;
+
+    cout << "Doubly Linked List (Forward): ";
+    head = one;
+    while (head != NULL) {
+        cout << head->name << " ";
+        head = head->next;
+    }
+    cout << "\n\n";
+
+    // TREE SECTION (Aimar as Root)
+    TreeNode* tRoot = new TreeNode(); // Aimar (Root)
+    TreeNode* tTwo = new TreeNode();  // Ahmad
+    TreeNode* tThree = new TreeNode(); // Anjana
+    TreeNode* tFour = new TreeNode();  // Jessy
+
+    tRoot->name = "Aimar";
+    tTwo->name = "Ahmad";
+    tThree->name = "Anjana";
+    tFour->name = "Jessy";
+
+    tRoot->left = tTwo;     // Ahmad is left child of Aimar
+    tRoot->right = tThree;  // Anjana is right child of Aimar
+    
+    tTwo->left = NULL;  tTwo->right = NULL;
+    
+    tThree->left = NULL;
+    tThree->right = tFour;  // Jessy is right child of Anjana
+    
+    tFour->left = NULL; tFour->right = NULL;
+
+    // TRAVERSAL OUTPUTS
+    cout << "--- Tree Traversals ---" << endl;
+    
+    cout << "Pre-order Traversal  (Root -> L -> R): ";
+    printPreOrder(tRoot);
+    cout << endl;
+
+    cout << "In-order Traversal   (L -> Root -> R): ";
+    printInOrder(tRoot);
+    cout << endl;
+
+    cout << "Post-order Traversal (L -> R -> Root): ";
+    printPostOrder(tRoot);
+    cout << endl;
+
+    return 0;
+}
