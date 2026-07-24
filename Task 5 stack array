@@ -1,0 +1,64 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Stack {
+public:
+    string arr[100];
+    int top;
+
+    Stack() {
+        top = -1;
+    }
+
+    void push(string name) {
+        if (top == 99) {
+            cout << "The stack is full." << endl;
+            return;
+        }
+
+        top++;
+        arr[top] = name;
+    }
+
+    void pop() {
+        if (top == -1) {
+            cout << "The stack is empty." << endl;
+            return;
+        }
+
+        cout << endl;
+        cout << arr[top] << " is popped" << endl;
+        top--;
+    }
+
+    void display() {
+        if (top == -1) {
+            cout << "The stack is empty." << endl;
+            return;
+        }
+
+        for (int i = top; i >= 0; i--) {
+            cout << arr[i] << endl;
+        }
+    }
+};
+
+int main() {
+    Stack s;
+
+    s.push("Aimar");
+    s.push("Ahmad");
+    s.push("Anjana");
+
+    cout << "Display from top to bottom:" << endl;
+    s.display();
+
+    s.pop();
+
+    cout << "\nAfter pop:" << endl;
+    s.display();
+
+    return 0;
+}
