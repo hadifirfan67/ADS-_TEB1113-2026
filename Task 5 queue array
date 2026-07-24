@@ -1,0 +1,77 @@
+// queue array
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Queue {
+public:
+    string arr[100];
+    int front;
+    int rear;
+
+    Queue() {
+        front = -1;
+        rear = -1;
+    }
+
+    void enqueue(string name) {
+        if (rear == 99) {
+            cout << "The queue is full." << endl;
+            return;
+        }
+
+        if (front == -1) {
+            front = 0;
+        }
+
+        rear++;
+        arr[rear] = name;
+    }
+
+    void dequeue() {
+        if (front == -1 || front > rear) {
+            cout << "This queue is empty." << endl;
+            return;
+        }
+
+        cout << endl;
+        cout << arr[front] << " is dequeued." << endl;
+        front++;
+
+        if (front > rear) {
+            front = -1;
+            rear = -1;
+        }
+    }
+
+    void display() {
+        if (front == -1 || front > rear) {
+            cout << "This queue is empty." << endl;
+            return;
+        }
+
+        for (int i = front; i <= rear; i++) {
+            cout << arr[i] << endl;
+        }
+    }
+};
+
+int main() {
+    Queue q;
+
+    q.enqueue("Aimar");
+    q.enqueue("Ahmad");
+    q.enqueue("Anjana");
+
+    cout << "Display from front to rear (left to right):" << endl;
+    q.display();
+
+    q.dequeue();
+
+    cout << "\nAfter dequeue the front:" << endl;
+    q.display();
+
+    return 0;
+}
